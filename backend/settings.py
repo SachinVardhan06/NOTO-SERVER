@@ -49,6 +49,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Replace with your frontend domain
     "https://noto-frontend.onrender.com/",
 ]
+
+ALLOWED_HOSTS = ['noto-server-80j5.onrender.com', 'localhost', '127.0.0.1']
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
