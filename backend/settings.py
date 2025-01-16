@@ -28,7 +28,8 @@ SECRET_KEY = 'django-insecure-&4w@g8w((el6##qf67+1h3&j3_l7*i%-*!sm8)8d8sa^g#s3p9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['noto-backend-4opl.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['noto-server-80j5.onrender.com', 'localhost']
+
 
 
 # Application definition
@@ -169,12 +170,17 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
