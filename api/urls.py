@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import RegisterView, LoginView, SubscriptionView,ProfileView,SendOTPView,VerifyOTPRegisterView,CreateOrderView,VerifyPaymentView
-from django.contrib import admin
+from .views import (
+    RegisterView, LoginView, SubscriptionView, ProfileView,
+    SendOTPView, VerifyOTPRegisterView, CreateOrderView, VerifyPaymentView
+)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('register/', RegisterView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
     path('subscription/', SubscriptionView.as_view(), name='subscription'),
