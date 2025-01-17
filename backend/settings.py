@@ -241,7 +241,7 @@ INSTALLED_APPS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
+    'https://noto-frontend.onrender.com',
     "https://noto-frontend.onrender.com/",
     "http://127.0.0.1:5173",
 ]
@@ -332,6 +332,17 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+# settings.py
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# For development, use this setting to serve static files
+if DEBUG:
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static'),
+    ]
+
 
 AUTH_USER_MODEL = 'api.User'
 
