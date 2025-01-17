@@ -243,6 +243,7 @@ INSTALLED_APPS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
+    'https://acenoto.tech',
     'https://noto-frontend.onrender.com',
     "https://noto-frontend.onrender.com",
     "http://127.0.0.1:5173",
