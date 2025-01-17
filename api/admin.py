@@ -22,8 +22,12 @@ class CustomUserAdmin(UserAdmin):
         }),
     )
 
+admin.site.register(User, CustomUserAdmin)
+
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('user', 'membership_type', 'start_date', 'end_date')
     list_filter = ('membership_type',)
     search_fields = ('user__email',)
+
+

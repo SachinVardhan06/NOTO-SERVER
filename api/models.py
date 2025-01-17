@@ -144,3 +144,25 @@ class Subscription(models.Model):
     def __str__(self):
         return f"{self.user.email} - {self.membership_type}"
 
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+class User(AbstractUser):
+    email = models.EmailField(unique=True)
+    
+    class Meta:
+        db_table = 'api_user'
+
+
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.utils import timezone
+
+class User(AbstractUser):
+    email = models.EmailField(unique=True)
+    
+    class Meta:
+        db_table = 'api_user'
+
+    def __str__(self):
+        return self.email
