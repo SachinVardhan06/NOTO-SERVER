@@ -244,9 +244,12 @@ INSTALLED_APPS = [
 
 CORS_ALLOWED_ORIGINS = [
     'https://noto-frontend.onrender.com',
-    "https://noto-frontend.onrender.com/",
+    "https://noto-frontend.onrender.com",
     "http://127.0.0.1:5173",
 ]
+AUTH_USER_MODEL = 'api.User'
+STATICFILES_DIRS = [BASE_DIR / "static"]  # Adjust the path as needed
+
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
