@@ -1,11 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import User, Subscription
-from django.utils import timezone
 
-@admin.register(User)
 class CustomUserAdmin(UserAdmin):
-    list_display = ('email', 'first_name', 'last_name', 'is_active')
+    list_display = ('email', 'first_name', 'last_name', 'is_staff')
     search_fields = ('email', 'first_name', 'last_name')
     ordering = ('email',)
     
@@ -26,8 +24,13 @@ admin.site.register(User, CustomUserAdmin)
 
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('user', 'membership_type', 'start_date', 'end_date')
-    list_filter = ('membership_type',)
-    search_fields = ('user__email',)
-
-
+    list_display = ('user', 'membership_type', 'start_date', 'end_date', 'is_expired')
+    list_filter = ('membership_type', 'start_date', 'end_date')
+    search_fields = ('user__email', 'user__first_name', 'user__last_name')
+    date_hierarchy = 'start_date'
+    readonly_fields = ('start_date',)
+    
+    def is_expired(self, obj):
+        return obj.is_expired()
+    is_expired.boolean = True
+    is_expired.short_description = 'Expired'
