@@ -425,6 +425,7 @@ class VerifyOTPView(APIView):
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
+from rest_framework import status
 
 User = get_user_model()
 
@@ -433,10 +434,19 @@ class ResetPasswordView(APIView):
         email = request.data.get('email')
         new_password = request.data.get('new_password')
         
+        if not email or not new_password:
+            return Response(
+                {'message': 'Email and new password are required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
         try:
             user = User.objects.get(email=email)
             user.set_password(new_password)
             user.save()
             return Response({'message': 'Password reset successful'})
         except User.DoesNotExist:
-            return Response({'message': 'User not found'}, status=404)
+            return Response(
+                {'message': 'User not found'}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
