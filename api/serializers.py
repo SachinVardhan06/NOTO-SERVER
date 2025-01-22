@@ -84,3 +84,12 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subscription
         fields = ['id', 'user', 'membership_type', 'purchase_date', 'start_date', 'end_date', 'time_left']
+
+
+
+from rest_framework import serializers
+
+class ResetPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    otp = serializers.CharField()
+    new_password = serializers.CharField(min_length=6)

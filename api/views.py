@@ -128,33 +128,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 import random
 
-class SendOTPView(APIView):
-    permission_classes = [AllowAny]
-    
-    def post(self, request):
-        email = request.data.get('email')
-        if not email:
-            return Response({'message': 'Email is required'}, status=400)
-            
-        try:
-            # Generate OTP
-            otp = ''.join([str(random.randint(0, 9)) for _ in range(6)])
-            # Store in session
-            request.session['otp'] = otp
-            request.session['email'] = email
-            
-            # Send email
-            send_mail(
-                'Your OTP for Registration',
-                f'Your OTP is: {otp}',
-                settings.DEFAULT_FROM_EMAIL,
-                [email],
-                fail_silently=False,
-            )
-            return Response({'message': 'OTP sent successfully'})
-        except Exception as e:
-            print(f"Error sending OTP: {str(e)}")
-            return Response({'message': 'Failed to send OTP'}, status=500)
+
 
 class VerifyOTPRegisterView(APIView):
     permission_classes = [AllowAny]
@@ -401,3 +375,68 @@ class VerifyPaymentView(APIView):
             }, status=400)
 
 
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from django.core.mail import send_mail
+from django.conf import settings
+import random
+from .models import User
+from .serializers import ResetPasswordSerializer
+
+class SendOTPView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        if not email:
+            return Response({'message': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            user = User.objects.get(email=email)
+            otp = str(random.randint(100000, 999999))
+            user.otp = otp
+            user.save()
+            
+            send_mail(
+                'Password Reset OTP',
+                f'Your OTP for password reset is: {otp}',
+                settings.EMAIL_HOST_USER,
+                [email],
+                fail_silently=False,
+            )
+            return Response({'message': 'OTP sent successfully'}, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+class VerifyOTPView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        otp = request.data.get('otp')
+        
+        try:
+            user = User.objects.get(email=email)
+            if user.otp == otp:
+                return Response({'message': 'OTP verified successfully'}, status=status.HTTP_200_OK)
+            return Response({'message': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
+        except User.DoesNotExist:
+            return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+class ResetPasswordView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        new_password = request.data.get('new_password')
+        
+        try:
+            user = User.objects.get(email=email)
+            user.set_password(new_password)
+            user.save()
+            return Response({'message': 'Password reset successful'})
+        except User.DoesNotExist:
+            return Response({'message': 'User not found'}, status=404)
