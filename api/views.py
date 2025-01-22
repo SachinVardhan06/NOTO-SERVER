@@ -421,15 +421,17 @@ class VerifyOTPView(APIView):
             return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.contrib.auth import get_user_model
+from rest_framework.permissions import AllowAny
 from rest_framework import status
+from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
 class ResetPasswordView(APIView):
+    permission_classes = [AllowAny]  # Allow unauthenticated access
+    
     def post(self, request):
         email = request.data.get('email')
         new_password = request.data.get('new_password')
